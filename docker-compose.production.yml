@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  web:
+    command: gunicorn --pythonpath intranet intranet.wsgi:application --bind 0.0.0.0:8000 --workers 3
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - web
+    volumes:
+      - static_volume:/home/static
+      - media_volume:/home/media
+      - ./certs:/etc/ssl/certs

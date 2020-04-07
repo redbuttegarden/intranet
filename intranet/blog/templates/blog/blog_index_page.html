@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags %}
+
+{% block content_class %}h-100{% endblock %}
+
+{% block content %}
+    {% for post in posts %}
+        <div class="card">
+            {% with post=post.specific %}
+                <div class="card-header">
+                    {{ post.title }}
+                </div>
+                <div class="card-body">
+                    {{ post.summary }}
+                    <footer class="text-muted">{{ post.date }}</footer>
+                    <a href="{% pageurl post %}" class="btn btn-primary">Read Post</a>
+                </div>
+                <div class="card-footer">
+                    {% for tag in post.tags.all %}
+                        <a class="badge badge-primary link-unstyled"
+                           href="{% routablepageurl index_page "post_by_tag" tag.slug %}">{{ tag }}</a>
+                    {% endfor %}
+                </div>
+            {% endwith %}
+        </div>
+    {% empty %}
+        <div class="row align-items-center h-100">
+            <h4 class="col-6 mx-auto">
+                There are currently no published blog posts. Please check back soon!
+            </h4>
+        </div>
+    {% endfor %}
+{% endblock %}
