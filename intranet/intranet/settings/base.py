@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'wagtail.core',
 
     'wagtail.contrib.table_block',
+    'wagtail.contrib.postgres_search',
 
     'modelcluster',
     'taggit',
@@ -168,6 +169,12 @@ WAGTAILEMBEDS_RESPONSIVE_HTML = True
 WAGTAIL_USER_EDIT_FORM = 'custom_user.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'custom_user.forms.CustomUserCreationForm'
 WAGTAIL_USER_CUSTOM_FIELDS = ['title']
+WAGTAILSEARCH_BACKENDS = {
+    'default': {
+        'BACKEND': 'wagtail.contrib.postgres_search.backend',
+        'SEARCH_CONFIG': 'english',
+    }
+}
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash

@@ -20,7 +20,7 @@ RUN useradd wagtail
 RUN chown -R wagtail /code
 USER wagtail
 
-RUN python manage.py collectstatic
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 

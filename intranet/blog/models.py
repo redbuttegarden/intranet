@@ -16,6 +16,7 @@ from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, Orderable
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
 from home.models import Heading
@@ -159,6 +160,12 @@ class BlogPage(Page):
         ], heading=_("Tags and Categories")),
         FieldPanel('summary'),
         StreamFieldPanel('body'),
+    ]
+
+    search_fields = Page.search_fields + [  # Inherit search_fields from Page
+        index.SearchField('summary'),
+        index.SearchField('body'),
+        index.FilterField('date'),
     ]
 
     parent_page_types = ['blog.BlogIndexPage']
