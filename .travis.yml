@@ -1,0 +1,22 @@
+language: python
+python:
+  - 3.7
+env:
+  - DJANGO=3.0
+before_install:
+  - export DJANGO_SETTINGS_MODULE="intranet.settings.travis"
+  - export DEBUG=True
+install:
+  - pip install coverage
+  - pip install coveralls
+  - pip install -r intranet/requirements.txt
+script:
+  - cd cts
+  - coverage run manage.py test
+after_success:
+  - coverage report
+  - coveralls
+notifications:
+  email:
+    on_success: change
+    on_failure: always
