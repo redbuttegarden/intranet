@@ -11,7 +11,7 @@ install:
   - pip install coveralls
   - pip install -r intranet/requirements.txt
 script:
-  - cd cts
+  - cd intranet
   - coverage run manage.py test
 after_success:
   - coverage report
