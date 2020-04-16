@@ -2,6 +2,8 @@ asgiref==3.2.3
 beautifulsoup4==4.6.0
 certifi==2019.11.28
 chardet==3.0.4
+coverage==5.1
+coveralls==2.0.0
 Django==3.0.3
 django-modelcluster==5.0.1
 django-taggit==1.2.0
