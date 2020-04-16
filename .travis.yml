@@ -8,10 +8,10 @@ services:
 before_script:
   - pip install docker-compose
 script:
-  - docker-compose run web sh -c "pip install coveralls && pip install coverage && coverage run -m pytest"
+  - docker-compose -f docker-compose.travis.yml run web sh -c "pip install coveralls && pip install coverage && coverage run -m pytest"
 after_success:
-  - docker-compose run web sh -c "coverage report"
-  - docker-compose run web sh -c "coveralls"
+  - docker-compose -f docker-compose.travis.yml run web sh -c "coverage report"
+  - docker-compose -f docker-compose.travis.yml run web sh -c "coveralls"
 notifications:
   email:
     on_success: change
