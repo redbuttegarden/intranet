@@ -12,7 +12,7 @@ install:
   - pip install -r intranet/requirements.txt
 script:
   - cd intranet
-  - coverage run pytest
+  - coverage run -m pytest
 after_success:
   - coverage report
   - coveralls
