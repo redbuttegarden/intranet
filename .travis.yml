@@ -3,19 +3,15 @@ python:
   - 3.7
 env:
   - DJANGO=3.0
-before_install:
-  - export DJANGO_SETTINGS_MODULE="intranet.settings.travis"
-  - export DEBUG=True
-install:
-  - pip install coverage
-  - pip install coveralls
-  - pip install -r intranet/requirements.txt
+services:
+  - docker
+before_script:
+  - pip install docker-compose
 script:
-  - cd intranet
-  - coverage run -m pytest
+  - docker-compose run web sh -c "pip install coveralls && pip install coverage && coverage run -m pytest"
 after_success:
-  - coverage report
-  - coveralls
+  - docker-compose run web sh -c "coverage report"
+  - docker-compose run web sh -c "coveralls"
 notifications:
   email:
     on_success: change
