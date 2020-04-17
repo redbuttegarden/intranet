@@ -10,7 +10,7 @@ before_script:
 script:
   - docker-compose -f docker-compose.travis.yml up --build -d
   - docker ps -a
-  - docker exec intranet_web_1 pytest
+  - docker exec intranet_web_1 pytest -W ignore::DeprecationWarning
 notifications:
   email:
     on_success: change
