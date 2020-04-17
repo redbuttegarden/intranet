@@ -8,10 +8,11 @@ services:
 before_script:
   - pip install docker-compose
 script:
-  - docker-compose -f docker-compose.travis.yml run web sh -c "coverage run -m pytest"
+  - docker-compose -f docker-compose.travis.yml up --build -d
+  - docker exec web coverage run -m pytest
 after_success:
-  - docker-compose -f docker-compose.travis.yml run web sh -c "coverage report"
-  - docker-compose -f docker-compose.travis.yml run web sh -c "coveralls"
+  - docker exec web coverage report
+  - docker exec web coveralls
 notifications:
   email:
     on_success: change
