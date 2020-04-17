@@ -9,11 +9,11 @@ before_script:
   - pip install docker-compose
 script:
   - docker-compose -f docker-compose.travis.yml up --build -d
-  - docker ps
-  - docker exec web coverage run -m pytest
+  - docker ps -a
+  - docker exec intranet_web_1 coverage run -m pytest
 after_success:
-  - docker exec web coverage report
-  - docker exec web coveralls
+  - docker exec intranet_web_1 coverage report
+  - docker exec intranet_web_1 coveralls
 notifications:
   email:
     on_success: change
