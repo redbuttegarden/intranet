@@ -10,7 +10,7 @@ before_script:
 script:
   - docker-compose -f docker-compose.travis.yml up --build -d
   - docker ps -a
-  - docker exec intranet_web_1 coverage run -m pytest
+  - docker exec intranet_web_1 pytest --cov=intranet
 after_success:
   - docker exec intranet_web_1 coverage report
   - docker exec intranet_web_1 coveralls
