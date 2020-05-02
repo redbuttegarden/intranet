@@ -39,7 +39,7 @@ LANGUAGES = (
 
 
 class CodeBlock(blocks.StructBlock):
-    code = blocks.TextBlock(max_length=8000)
+    code = blocks.TextBlock(max_length=20000)
     language = blocks.ChoiceBlock(choices=LANGUAGES, required=False, default='bash')
 
     class Meta:
