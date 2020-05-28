@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 1m
+  evaluation_interval: 1m
+
+rule_files:
+  - 'django_rules'
+
+scrape_configs:
+  - job_name: cadvisor
+    static_configs:
+      - targets:
+          - cadvisor:8080
+  - job_name: 'node'
+    static_configs:
+      - targets: ['intranet.redbutte.utah.edu:9100']
+  - job_name: 'django'
+    static_configs:
+      - targets:
+          - web:8000

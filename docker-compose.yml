@@ -5,6 +5,7 @@ services:
     env_file:
       - /Users/$USER/intranet_web.env
     build: intranet/
+    container_name: web
     volumes:
       - ./intranet:/code
       - static_volume:/code/static
@@ -15,12 +16,37 @@ services:
       - '8000:8000'
     depends_on:
       - db
+    command: python /code/manage.py runserver 0.0.0.0:8000
   db:
     image: "postgres:11"
+    container_name: db
     env_file:
       - /Users/$USER/intranet_db.env
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - '9090:9090'
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - cadvisor
+  cadvisor:
+    image: google/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - '8080:8080'
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    depends_on:
+      - web
 
 volumes:
   postgres_data:

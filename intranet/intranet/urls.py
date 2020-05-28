@@ -16,6 +16,8 @@ urlpatterns = [
     path('documents/', include(wagtaildocs_urls)),
 
     path('search/', search_views.search, name='search'),
+
+    path('', include('django_prometheus.urls')),
 ]
 
 if settings.DEBUG:
