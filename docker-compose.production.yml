@@ -1,9 +1,18 @@
-version: '3'
+version: '3.2'
 
 services:
   web:
-    ports: []
-    command: gunicorn --pythonpath intranet intranet.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    command: bash -c "
+      python /code/manage.py collectstatic --noinput
+      && gunicorn --pythonpath intranet intranet.wsgi:application --bind 0.0.0.0:8000 --workers 3
+      "
+  prometheus:
+    volumes:
+      - ./certs:/etc/ssl/certs
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.external-url=https://intranet.redbutte.utah.edu/prometheus
+      - --web.route-prefix=/prometheus/
   nginx:
     build: ./nginx
     ports:
@@ -11,6 +20,7 @@ services:
       - "443:443"
     depends_on:
       - web
+      - prometheus
     volumes:
       - static_volume:/home/static
       - media_volume:/home/media

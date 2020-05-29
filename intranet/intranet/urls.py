@@ -17,7 +17,7 @@ urlpatterns = [
 
     path('search/', search_views.search, name='search'),
 
-    path('', include('django_prometheus.urls')),
+    path('monitoring/', include('django_prometheus.urls')),
 ]
 
 if settings.DEBUG:
