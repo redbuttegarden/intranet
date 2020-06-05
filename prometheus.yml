@@ -11,8 +11,9 @@ scrape_configs:
       - targets:
           - cadvisor:8080
   - job_name: 'node'
-    static_configs:
-      - targets: ['intranet.redbutte.utah.edu:9100']
+    file_sd_configs:
+      - files:
+          - 'targets.json'
   - job_name: 'django'
     tls_config:
       cert_file: /etc/ssl/certs/intranet_redbutte_utah_edu_cert.cer
