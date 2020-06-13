@@ -1,0 +1,3 @@
+# Run box_report management as a cron job in the web docker container
+
+0 0 * * Sun /code/manage.py box_report >> /var/log/cron.log 2>&1

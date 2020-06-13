@@ -3,6 +3,13 @@ LABEL maintainer="avery.uslaner@redbutte.utah.edu"
 
 ENV PYTHONUNBUFFERED 1
 
+RUN apt-get update && apt-get -y install cron
+
+COPY box_report /etc/cron.d/box_report
+RUN chmod 0644 /etc/cron.d/box_report
+RUN crontab /etc/cron.d/box_report
+RUN touch /var/log/cron.log
+
 COPY ./requirements.txt /code/requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r /code/requirements.txt
