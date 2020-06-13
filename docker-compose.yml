@@ -10,6 +10,7 @@ services:
       - ./intranet:/code
       - static_volume:/code/static
       - media_volume:/code/media
+      - /Users/$USER/Box/RBG-Shared:/Box:ro
     expose:
       - '8000'
     ports:
