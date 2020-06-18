@@ -1,22 +1,6 @@
 {% extends 'base.html' %}
+{% load render_table from django_tables2 %}
 
 {% block content %}
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">Folder Name</th>
-            <th scope="col">Size (KB)</th>
-            <th scope="col">Date</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for stat in stats %}
-            <tr>
-                <td>{{ stat.folder.name }}</td>
-                <td>{{ stat.size }}</td>
-                <td>{{ stat.date }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% render_table table %}
 {% endblock %}

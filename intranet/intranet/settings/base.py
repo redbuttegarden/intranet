@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.postgres_search',
 
     'django_prometheus',
+    'django_tables2',
     'modelcluster',
     'taggit',
 
@@ -202,3 +203,7 @@ EMAIL_PORT = 587
 
 DEFAULT_FROM_EMAIL = 'it@redbutte.utah.edu'
 SERVER_EMAIL = 'it@redbutte.utah.edu'
+
+# Django_tables2 Settings
+
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
