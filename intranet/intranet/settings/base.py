@@ -190,3 +190,15 @@ WAGTAILSEARCH_BACKENDS = {
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'https://intranet.redbutte.utah.edu'
+
+# Email Settings
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.utah.edu'
+EMAIL_HOST_USER = 'u6000791@umail.utah.edu'
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+EMAIL_PORT = 587
+
+DEFAULT_FROM_EMAIL = 'it@redbutte.utah.edu'
+SERVER_EMAIL = 'it@redbutte.utah.edu'
