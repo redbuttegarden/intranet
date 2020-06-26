@@ -62,15 +62,6 @@ services:
     expose:
       - "3306"
 
-  snipe-it:
-    image: snipe/snipe-it:v4.9.3
-    env_file:
-      - /Users/$USER/intranet_snipe-it.env
-    ports:
-      - "3051:80"
-    depends_on:
-      - snipe-mysql
-
 volumes:
   postgres_data:
   static_volume:
