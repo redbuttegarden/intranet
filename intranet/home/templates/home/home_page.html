@@ -4,7 +4,18 @@
 {% block content_class %}h-100{% endblock %}
 
 {% block content %}
-    <div class="row justify-content-center align-items-center h-100">
-        <h1>Red Butte Garden Intranet</h1>
+    <div class="row align-items-center h-100">
+        <div class="col h-100">
+            <h3>Useful Links</h3>
+            <ul>
+                <li><a href="{% url 'box:folders' %}">Box Folder Sizes</a></li>
+            </ul>
+        </div>
+
+        <div class="col justify-content-center">
+            <h1>Red Butte Garden Intranet</h1>
+        </div>
+
+        <div class="col"></div>
     </div>
 {% endblock content %}
