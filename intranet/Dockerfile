@@ -13,14 +13,18 @@ RUN pip install gunicorn
 COPY . /code/
 WORKDIR /code/
 
-RUN useradd wagtail
-RUN chown -R wagtail /code
-USER wagtail
-
 COPY box_report /etc/cron.d/box_report
 RUN chmod 0644 /etc/cron.d/box_report
-RUN crontab /etc/cron.d/box_report
+
+RUN useradd wagtail
+RUN chown -R wagtail /code
 RUN touch /var/log/cron.log
+RUN chown wagtail /etc/cron.d/box_report
+RUN chown wagtail /var/log/cron.log
+USER wagtail
+
+RUN crontab /etc/cron.d/box_report
+
 
 EXPOSE 8000
 
