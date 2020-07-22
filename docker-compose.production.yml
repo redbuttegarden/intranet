@@ -14,8 +14,6 @@ services:
       - --web.external-url=https://intranet.redbutte.utah.edu/prometheus
       - --web.route-prefix=/prometheus/
   nginx:
-    env_file:
-      - /Users/$USER/intranet_snipe-it.env
     build: ./nginx
     ports:
       - "80:80"
@@ -23,7 +21,6 @@ services:
     depends_on:
       - web
       - prometheus
-      - snipe-mysql
     volumes:
       - static_volume:/home/static
       - media_volume:/home/media
