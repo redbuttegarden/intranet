@@ -13,6 +13,20 @@ services:
       - --config.file=/etc/prometheus/prometheus.yml
       - --web.external-url=https://intranet.redbutte.utah.edu/prometheus
       - --web.route-prefix=/prometheus/
+  snipe-mysql:
+    image: mysql:5.6
+    restart: unless-stopped
+    env_file: /Users/intranetuser/intranet_snipe-it.env
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
+  snipe-it:
+    image: snipe/snipe-it
+    restart: unless-stopped
+    env_file: /Users/intranetuser/intranet_snipe-it.env
+    depends_on:
+      - snipe-mysql
+    volumes:
+      - ./volumes/snipeit:/var/lib/snipeit
   nginx:
     build: ./nginx
     ports:
