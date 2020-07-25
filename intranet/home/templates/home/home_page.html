@@ -9,6 +9,10 @@
             <h3>Useful Links</h3>
             <ul>
                 <li><a href="{% url 'box:folders' %}">Box Folder Sizes</a></li>
+                {% if request.user.is_staff %}
+                    <li><a href="https://intranet.redbutte.utah.edu/prometheus/targets">Prometheus Monitoring</a></li>
+                    <li><a href="https://snipeit.intranet.redbutte.utah.edu">Snipe IT Inventory Management</a></li>
+                {% endif %}
             </ul>
         </div>
 
