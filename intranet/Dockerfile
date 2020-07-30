@@ -3,7 +3,10 @@ LABEL maintainer="avery.uslaner@redbutte.utah.edu"
 
 ENV PYTHONUNBUFFERED 1
 
-RUN apt-get update && apt-get -y install cron
+RUN apt-get update && apt-get -y install \
+    cron \
+    libldap2-dev \
+    libsasl2-dev
 
 COPY ./requirements.txt /code/requirements.txt
 RUN pip install --upgrade pip

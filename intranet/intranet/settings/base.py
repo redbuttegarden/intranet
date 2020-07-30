@@ -9,10 +9,12 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import ldap
 import os
 
+from django_auth_ldap.config import LDAPSearch, LDAPGroupQuery, GroupOfNamesType
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
@@ -207,3 +209,36 @@ SERVER_EMAIL = 'it@redbutte.utah.edu'
 # Django_tables2 Settings
 
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
+
+# LDAP
+AUTHENTICATION_BACKENDS = [
+    "django_auth_ldap.backend.LDAPBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+AUTH_LDAP_SERVER_URI = "ldap://dc-prk.ad.utah.edu"
+AUTH_LDAP_BIND_DN = os.environ.get('LDAP_BIND_USER')
+AUTH_LDAP_BIND_PASSWORD = os.environ.get('LDAP_BIND_PASS')
+AUTH_LDAP_USER_SEARCH = LDAPSearch(
+    "ou=People,dc=ad,dc=utah,dc=edu", ldap.SCOPE_SUBTREE, "(sAMAccountName=%(user)s)"
+)
+AUTH_LDAP_CACHE_TIMEOUT = 3600
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
+    "ou=Red Butte,ou=Department OUs,dc=ad,dc=utah,dc=edu", ldap.SCOPE_SUBTREE, "(objectClass=groupOfNames)"
+)
+AUTH_LDAP_GROUP_TYPE = GroupOfNamesType()
+AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+    "is_staff": LDAPGroupQuery("cn=Red Butte IT Admins,ou=Red Butte,ou=Department OUs,dc=ad,dc=utah,dc=edu"),
+    "is_superuser": LDAPGroupQuery("cn=Red Butte IT Admins,ou=Red Butte,ou=Department OUs,dc=ad,dc=utah,dc=edu"),
+}
+AUTH_LDAP_USER_ATTR_MAP = {
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail",
+}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {"django_auth_ldap": {"level": "DEBUG", "handlers": ["console"]}},
+}
