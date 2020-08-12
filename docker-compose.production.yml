@@ -27,6 +27,7 @@ services:
       - snipe-mysql
     volumes:
       - ./volumes/snipeit:/var/lib/snipeit
+      - ./volumes/snipeit-backups:/var/www/html/storage/app/backups
   nginx:
     build: ./nginx
     ports:
