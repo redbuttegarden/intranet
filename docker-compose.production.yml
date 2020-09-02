@@ -30,13 +30,179 @@ services:
       - ./volumes/snipeit-backups:/var/www/html/storage/app/backups
   nginx:
     build: ./nginx
+    restart: always
     ports:
       - "80:80"
       - "443:443"
     depends_on:
       - web
       - prometheus
+      - bw-web
+      - bw-admin
+      - bw-api
+      - bw-identity
     volumes:
       - static_volume:/home/static
       - media_volume:/home/media
       - ./certs:/etc/ssl/certs
+      - ./bwdata/nginx:/etc/bitwarden/nginx
+      - ./bwdata/letsencrypt:/etc/letsencrypt
+      - ./bwdata/logs/nginx:/var/log/nginx
+    env_file:
+      - ./bwdata/env/uid.env
+    networks:
+      - default
+      - public
+
+  # Bitwarden containers
+  bw-mssql:
+    image: bitwarden/mssql:latest
+    container_name: bitwarden-mssql
+    restart: always
+    stop_grace_period: 60s
+    volumes:
+      - bw-data:/var/opt/mssql/data
+      - bw-backups:/etc/bitwarden/mssql/backups
+      - ./bwdata/logs/mssql:/var/opt/mssql/log
+    env_file:
+      - ./bwdata/docker/mssql.env
+      - ./bwdata/env/uid.env
+      - ./bwdata/env/mssql.override.env
+
+  bw-web:
+    image: bitwarden/web:latest
+    container_name: bitwarden-web
+    restart: always
+    volumes:
+      - ./bwdata/web:/etc/bitwarden/web
+    env_file:
+      - ./bwdata/docker/global.env
+      - ./bwdata/env/uid.env
+
+  attachments:
+    image: bitwarden/attachments:latest
+    container_name: bitwarden-attachments
+    restart: always
+    volumes:
+      - ./bwdata/core/attachments:/etc/bitwarden/core/attachments
+    env_file:
+      - ./bwdata/docker/global.env
+      - ./bwdata/env/uid.env
+
+  bw-api:
+    image: bitwarden/api:latest
+    container_name: bitwarden-api
+    restart: always
+    volumes:
+      - ./bwdata/core:/etc/bitwarden/core
+      - ./certs:/etc/bitwarden/ca-certificates
+      - ./bwdata/logs/api:/etc/bitwarden/logs
+    env_file:
+      - ./bwdata/docker/global.env
+      - ./bwdata/env/uid.env
+      - ./bwdata/env/global.override.env
+    networks:
+      - default
+      - public
+
+  bw-identity:
+    image: bitwarden/identity:latest
+    container_name: bitwarden-identity
+    restart: always
+    volumes:
+      - ./bwdata/identity:/etc/bitwarden/identity
+      - ./bwdata/core:/etc/bitwarden/core
+      - ./certs:/etc/bitwarden/ca-certificates
+      - ./bwdata/logs/identity:/etc/bitwarden/logs
+    env_file:
+      - ./bwdata/docker/global.env
+      - ./bwdata/env/uid.env
+      - ./bwdata/env/global.override.env
+    networks:
+      - default
+      - public
+
+  #  sso:
+  #    image: bitwarden/sso:latest
+  #    container_name: bitwarden-sso
+  #    restart: always
+  #    volumes:
+  #      - ../identity:/etc/bitwarden/identity
+  #      - ../core:/etc/bitwarden/core
+  #      - ../ca-certificates:/etc/bitwarden/ca-certificates
+  #      - ../logs/sso:/etc/bitwarden/logs
+  #    env_file:
+  #      - global.env
+  #      - ../env/uid.env
+  #      - ../env/global.override.env
+  #    networks:
+  #      - default
+  #      - public
+
+  bw-admin:
+    image: bitwarden/admin:latest
+    container_name: bitwarden-admin
+    restart: always
+    depends_on:
+      - bw-mssql
+    volumes:
+      - ./bwdata/core:/etc/bitwarden/core
+      - ./certs:/etc/bitwarden/ca-certificates
+      - ./bwdata/logs/admin:/etc/bitwarden/logs
+    env_file:
+      - ./bwdata/docker/global.env
+      - ./bwdata/env/uid.env
+      - ./bwdata/env/global.override.env
+    networks:
+      - default
+      - public
+
+  icons:
+    image: bitwarden/icons:latest
+    container_name: bitwarden-icons
+    restart: always
+    volumes:
+      - ./certs:/etc/bitwarden/ca-certificates
+      - ./bwdata/logs/icons:/etc/bitwarden/logs
+    env_file:
+      - ./bwdata/docker/global.env
+      - ./bwdata/env/uid.env
+    networks:
+      - default
+      - public
+
+  notifications:
+    image: bitwarden/notifications:latest
+    container_name: bitwarden-notifications
+    restart: always
+    volumes:
+      - ./certs:/etc/bitwarden/ca-certificates
+      - ./bwdata/logs/notifications:/etc/bitwarden/logs
+    env_file:
+      - ./bwdata/docker/global.env
+      - ./bwdata/env/uid.env
+      - ./bwdata/env/global.override.env
+    networks:
+      - default
+      - public
+
+  events:
+    image: bitwarden/events:latest
+    container_name: bitwarden-events
+    restart: always
+    volumes:
+      - ./certs:/etc/bitwarden/ca-certificates
+      - ./bwdata/logs/events:/etc/bitwarden/logs
+    env_file:
+      - ./bwdata/docker/global.env
+      - ./bwdata/env/uid.env
+      - ./bwdata/env/global.override.env
+    networks:
+      - default
+      - public
+
+networks:
+  default:
+    internal: true
+  public:
+    internal: false
