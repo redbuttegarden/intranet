@@ -428,38 +428,6 @@
     }
   },
   {
-    "model": "contenttypes.contenttype",
-    "pk": 1,
-    "fields": {
-      "app_label": "wagtailcore",
-      "model": "page"
-    }
-  },
-  {
-    "model": "contenttypes.contenttype",
-    "pk": 2,
-    "fields": {
-      "app_label": "wagtailimages",
-      "model": "image"
-    }
-  },
-  {
-    "model": "contenttypes.contenttype",
-    "pk": 3,
-    "fields": {
-      "app_label": "wagtailadmin",
-      "model": "admin"
-    }
-  },
-  {
-    "model": "contenttypes.contenttype",
-    "pk": 4,
-    "fields": {
-      "app_label": "wagtaildocs",
-      "model": "document"
-    }
-  },
-  {
     "model": "taggit.taggeditem",
     "pk": 1,
     "fields": {
